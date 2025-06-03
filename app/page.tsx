@@ -1,6 +1,17 @@
+"use client";
+import { useEffect } from "react";
 import Image from "next/image";
-
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import {Button} from "@/components/ui/button";
 export default function Home() {
+  const router = useRouter();
+  const { data: session , status } = useSession();
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -97,6 +108,12 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
+        <Button
+                className="border-[#5d5d64] border h-8 ml-auto rounded-[3px] hover:bg-white hover:text-black"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
+                Logout
+              </Button>
       </footer>
     </div>
   );

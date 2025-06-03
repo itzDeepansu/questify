@@ -37,15 +37,13 @@ export async function POST(request: NextRequest) {
     await prisma.user.create({
       data: {
         username: body.username,
-        phoneNumber: body.email,
+        email: body.email,
         image: body.image,
         passwordHash: passwordHash,
-        onlineStatus: false,
-        socketID: null,
       },
     });
 
-    return NextResponse.json({ message: "User created successfully" }, { status: 201 });
+    return NextResponse.json({ message: "User created successfully" }, { status: 200 });
 
   } catch (error: any) {
     console.error("User registration error:", error);
