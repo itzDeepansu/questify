@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
-import { useSession } from "next-auth/react";
-const Questioncard = ({ question , handleUpvote }) => {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
+import { useSessionContext } from "@/context/SessionContext";
+const Questioncard = ({ question, handleUpvote }) => {
+  const { user } = useSessionContext();
+  const [isUpvoted, setIsUpvoted] = useState(question.alreadyUpvoted);
+  console.log(question);
+  const handleUpVoteClick = () => {
+    if(isUpvoted) return;
+    setIsUpvoted(true);
+    handleUpvote("question", question.id, user?.id);
+  };
   return (
     <div className="flex items-start space-x-3">
       <Avatar className="w-10 h-10">
@@ -25,10 +31,17 @@ const Questioncard = ({ question , handleUpvote }) => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleUpvote("question", question.id ,userId)}
+              disabled={isUpvoted}
+              onClick={() => handleUpVoteClick()}
               className="flex items-center space-x-1"
             >
-              <ChevronUp className="w-4 h-4" />
+              <ChevronUp
+                className={`w-4 h-4 ${
+                  isUpvoted
+                    ? "text-green-500"
+                    : "text-muted-foreground"
+                }`}
+              />
               <span>{question._count.upvotes}</span>
             </Button>
           </div>

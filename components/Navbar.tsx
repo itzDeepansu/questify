@@ -3,9 +3,9 @@ import { Search, Home, Users, BookOpen, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useSession } from "next-auth/react";
+import { useSessionContext } from '@/context/SessionContext';
 const Navbar = ({externalClasses = ""}) => {
-  const { data: session, status } = useSession();
+  const { user } = useSessionContext();
   return (
     <header className={`${externalClasses} bg-white border-b border-gray-200 sticky top-0 z-50`}>
       <div className="max-w-6xl mx-auto px-4 py-3">
@@ -41,7 +41,7 @@ const Navbar = ({externalClasses = ""}) => {
               <Settings className="w-4 h-4" />
             </Button>
             <Avatar className="w-8 h-8">
-              <AvatarImage src={session?.user?.image} />
+              <AvatarImage src={user?.image} />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
           </div>

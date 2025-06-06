@@ -3,23 +3,26 @@ import React, { useState , useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import Questioncard from "./Questioncard";
 import axios from "@/libs/axios";
+import { useSessionContext } from "@/context/SessionContext";
 const Questionsfeed = () => {
+  const {user} = useSessionContext();
   const [questions, setQuestions] = useState([]);
   useEffect(() => {
+    if(!user) return
     const fetchQuestions = async () => {
       try {
-        const response = await axios.get("/question/getQuestions");
+        const response = await axios.post("/question/getQuestions",{userId:user?.id});
         setQuestions(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
     }
     fetchQuestions();
-  },[]);
+  },[user]);
   const handleUpvote = async (type: string, questionId: number,userId: number) => {
+    console.log(type, questionId,userId);
     try {
-      const response = await axios.put(`/${type}/upvote`,{
+      const response = await axios.post(`/${type}/upvote`,{
         questionId,
         userId,
       });
