@@ -7,10 +7,11 @@ import { useSessionContext } from "@/context/SessionContext";
 const Questioncard = ({ question, handleUpvote }) => {
   const { user } = useSessionContext();
   const [isUpvoted, setIsUpvoted] = useState(question.alreadyUpvoted);
-  console.log(question);
+  const [upvotes, setUpvotes] = useState(question._count.upvotes);
   const handleUpVoteClick = () => {
     if(isUpvoted) return;
     setIsUpvoted(true);
+    setUpvotes(upvotes + 1);
     handleUpvote("question", question.id, user?.id);
   };
   return (
@@ -42,7 +43,7 @@ const Questioncard = ({ question, handleUpvote }) => {
                     : "text-muted-foreground"
                 }`}
               />
-              <span>{question._count.upvotes}</span>
+              <span>{upvotes}</span>
             </Button>
           </div>
           <div className="flex space-x-2">

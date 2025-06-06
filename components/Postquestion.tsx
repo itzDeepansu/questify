@@ -1,25 +1,58 @@
-import React,{ useState} from "react";
+import React, { use, useState } from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSessionContext } from "@/context/SessionContext";
+import toast from "react-hot-toast";
+import axios from "@/libs/axios";
 const Postquestion = () => {
-  const { data: session, status } = useSession();
-    const [newQuestion, setNewQuestion] = useState({ title: "", content: "", tags: "" })
-    const handleSubmitQuestion = () => {
+  const user = useSessionContext();
+  const [newQuestion, setNewQuestion] = useState({
+    title: "",
+    content: "",
+    tags: "",
+  });
+  const handleSubmitQuestion = async () => {
     if (newQuestion.title && newQuestion.content) {
-      // Handle the question submission here
       console.log("Question submitted:", newQuestion);
+      const tagsArray = newQuestion.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
+      const response = await axios.post("/question/postQuestion", {
+        userId: user.user.id ,
+        title: newQuestion.title,
+        body: newQuestion.content,
+        topicNames: tagsArray,
+      });
+      if (response.status === 200) {
+        setNewQuestion({ title: "", content: "", tags: "" });
+        toast.success("Question submitted successfully!");
+      }else{
+        toast.error("Error submitting question. Please try again.");
+      }
     }
-  }
+    //   "userId": 3,
+    //   "title": "How to manage state in large React apps?",
+    //   "body": "What are some patterns or libraries for scalable state management?",
+    //   "topicNames": ["React", "State Management", "Best Practices"]
+    // content
+    // "nothing"
+
+    // tags
+    // "asdasdasd,asd,as,d,as,d,asd,as,d,asd,as,d,as"
+
+    // title
+    // "what is new"
+  };
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center space-x-3">
           <Avatar className="w-10 h-10">
-            <AvatarImage src={session?.user?.image} />
+            <AvatarImage src={user.user?.image} />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="flex-1">
@@ -60,7 +93,9 @@ const Postquestion = () => {
             >
               Cancel
             </Button>
-            <Button onClick={handleSubmitQuestion}>Post Question</Button>
+            <Button disabled={!user.user?.id} onClick={handleSubmitQuestion}>
+              Post Question
+            </Button>
           </div>
         </CardContent>
       )}
