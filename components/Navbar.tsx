@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSessionContext } from '@/context/SessionContext';
+import Link from "next/link";
 const Navbar = ({externalClasses = ""}) => {
   const { user } = useSessionContext();
   return (
@@ -13,18 +14,18 @@ const Navbar = ({externalClasses = ""}) => {
           <div className="flex items-center space-x-2">
             <img src="/questify_logo.png" alt="unable to load" className="w-32"/>
             <nav className="hidden md:flex space-x-4">
-              <Button variant="ghost" size="sm">
+              <Link href="/" className="flex items-center hover:bg-gray-200 rounded-md py-1 px-3">
                 <Home className="w-4 h-4 mr-2" />
                 Home
-              </Button>
-              <Button variant="ghost" size="sm">
+              </Link>
+              <Link href="/" className="flex items-center hover:bg-gray-200 rounded-md py-1 px-3">
                 <Users className="w-4 h-4 mr-2" />
                 Following
-              </Button>
-              <Button variant="ghost" size="sm">
+              </Link>
+              <Link href="/" className="flex items-center hover:bg-gray-200 rounded-md py-1 px-3">
                 <BookOpen className="w-4 h-4 mr-2" />
                 Spaces
-              </Button>
+              </Link>
             </nav>
           </div>
           <div className="flex-1 max-w-md mx-4">

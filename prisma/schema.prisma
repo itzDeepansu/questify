@@ -16,49 +16,54 @@ model temp {
 }
 
 model User {
-  id              Int                @id @default(autoincrement())
-  username        String             @unique
-  email           String             @unique
-  passwordHash    String
-  image            String?
-  createdAt       DateTime           @default(now())
-  answers         Answer[]
-  answerVotes     AnswerUpvote[]
-  discussions     Discussion[]
-  discussionVotes DiscussionUpvote[]
-  notifications   Notification[]
-  questions       Question[]
-  questionVotes   QuestionUpvote[]
-  interests       UserInterest[]
+  id                    Int                    @id @default(autoincrement())
+  username              String                 @unique
+  email                 String                 @unique
+  passwordHash          String
+  image                 String?
+  createdAt             DateTime               @default(now())
+  answers               Answer[]
+  answerVotes           AnswerUpvote[]
+  answerDownvotes       AnswerDownvote[]
+  discussions           Discussion[]
+  discussionVotes       DiscussionUpvote[]
+  discussionDownvotes   DiscussionDownvote[]
+  notifications         Notification[]
+  questions             Question[]
+  questionVotes         QuestionUpvote[]
+  questionDownvotes     QuestionDownvote[]
+  interests             UserInterest[]
 }
 
 model Question {
-  id          Int              @id @default(autoincrement())
+  id          Int                  @id @default(autoincrement())
   userId      Int
   title       String
   body        String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
   answers     Answer[]
   discussions Discussion[]
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   topics      QuestionTopic[]
   upvotes     QuestionUpvote[]
+  downvotes   QuestionDownvote[]
 
   @@index([userId])
   @@index([createdAt])
 }
 
 model Answer {
-  id         Int            @id @default(autoincrement())
+  id         Int             @id @default(autoincrement())
   questionId Int
   userId     Int
   body       String
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  question   Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   upvotes    AnswerUpvote[]
+  downvotes  AnswerDownvote[]
 
   @@index([questionId])
   @@index([userId])
@@ -66,15 +71,16 @@ model Answer {
 }
 
 model Discussion {
-  id         Int                @id @default(autoincrement())
+  id         Int                  @id @default(autoincrement())
   questionId Int
   userId     Int
   content    String
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
-  question   Question           @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  user       User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  question   Question             @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   upvotes    DiscussionUpvote[]
+  downvotes  DiscussionDownvote[]
 
   @@index([questionId])
   @@index([userId])
@@ -115,6 +121,15 @@ model QuestionUpvote {
   @@id([userId, questionId])
 }
 
+model QuestionDownvote {
+  userId     Int
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, questionId])
+}
+
 model AnswerUpvote {
   userId   Int
   answerId Int
@@ -124,7 +139,25 @@ model AnswerUpvote {
   @@id([userId, answerId])
 }
 
+model AnswerDownvote {
+  userId   Int
+  answerId Int
+  answer   Answer @relation(fields: [answerId], references: [id], onDelete: Cascade)
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, answerId])
+}
+
 model DiscussionUpvote {
+  userId       Int
+  discussionId Int
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, discussionId])
+}
+
+model DiscussionDownvote {
   userId       Int
   discussionId Int
   discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
