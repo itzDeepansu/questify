@@ -19,11 +19,28 @@ import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
-const WriteDiscussion = ({questionId}) => {
+import toast  from "react-hot-toast";
+const WriteDiscussion = ({ questionId ,discussionRefreshTrigger }) => {
   const [newDiscussion, setNewDiscussion] = useState("");
   const { user } = useSessionContext();
   const handleSubmitDiscussion = async () => {
-    //logic
+    if (newDiscussion.trim() === "") return;
+    if (!user) return;
+    try {
+      const response = await axios.post("discussion/writeDiscussion", {
+        questionId,
+        userId: user.id,
+        content: newDiscussion,
+      });
+      if (response.status === 200) {
+        toast.success("Answer submitted successfully!");
+        setNewDiscussion("");
+        discussionRefreshTrigger();
+      }
+    } catch (err) {
+      toast.error("Error submitting answer. Please try again.");
+      console.error(err);
+    }
   };
   return (
     <Card>

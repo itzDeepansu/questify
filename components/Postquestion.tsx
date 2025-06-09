@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSessionContext } from "@/context/SessionContext";
 import toast from "react-hot-toast";
 import axios from "@/libs/axios";
-const Postquestion = () => {
+const Postquestion = ({answerRefreshTrigger}) => {
   const user = useSessionContext();
   const [newQuestion, setNewQuestion] = useState({
     title: "",
@@ -30,6 +30,7 @@ const Postquestion = () => {
       if (response.status === 200) {
         setNewQuestion({ title: "", content: "", tags: "" });
         toast.success("Question submitted successfully!");
+        answerRefreshTrigger();
       }else{
         toast.error("Error submitting question. Please try again.");
       }

@@ -19,7 +19,7 @@ import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
-const ExistingDiscussions = ({ questionId }) => {
+const ExistingDiscussions = ({ questionId , refreshFlag }) => {
   const { user } = useSessionContext();
   const [data, setData] = useState(null);
 
@@ -38,7 +38,7 @@ const ExistingDiscussions = ({ questionId }) => {
       }
     }
     getData();
-  },[user])
+  },[user,refreshFlag])
   const handleUpvoteDiscussion = async (discussionId) => {
     //LOGIC GOES HERE
   }

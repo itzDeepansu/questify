@@ -6,11 +6,31 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSessionContext } from "@/context/SessionContext";
+import axios from "@/libs/axios";
+import toast from "react-hot-toast";
 
-const WriteAnswer = ({questionId}) => {
+const WriteAnswer = ({ questionId , answerRefreshTrigger }) => {
   const [newAnswer, setNewAnswer] = useState("");
   const { user } = useSessionContext();
-  const handleSubmitAnswer = () => {};
+  const handleSubmitAnswer = async () => {
+    if (newAnswer.trim() === "") return;
+    if (!user) return;
+    try {
+      const response = await axios.post("answer/writeAnswer", {
+        questionId,
+        userId: user.id,
+        body: newAnswer,
+      });
+      if (response.status === 200) {
+        toast.success("Answer submitted successfully!");
+        setNewAnswer("");
+        answerRefreshTrigger();
+      }
+    } catch (err) {
+      toast.error("Error submitting answer. Please try again.");
+      console.error(err);
+    }
+  };
   return (
     <Card>
       <CardHeader>

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import {useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,10 @@ import Topicsbar from "@/components/Topicsbar";
 export default function Home() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [answerRefreshFlag, setAnswerRefreshFlag] = useState(false);
+  const answerRefreshTrigger = () => {
+    setAnswerRefreshFlag((prev) => !prev);
+  }
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -22,8 +26,8 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-6">
-            <Postquestion />
-            <Questionsfeed />
+            <Postquestion answerRefreshTrigger={answerRefreshTrigger}/>
+            <Questionsfeed refreshFlag={answerRefreshFlag}/>
           </div>
           <Topicsbar />
         </div>

@@ -19,7 +19,7 @@ import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
-const ExistingAnswers = ({ questionId }) => {
+const ExistingAnswers = ({ questionId ,refreshFlag }) => {
   const { user } = useSessionContext();
   const [data, setData] = useState(null);
   useEffect(() => {
@@ -37,7 +37,7 @@ const ExistingAnswers = ({ questionId }) => {
       }
     };
     getData();
-  }, [user]);
+  }, [user,refreshFlag]);
   const handleUpvoteAnswer = async (answerId) => {
     //logic here
   };
@@ -48,7 +48,7 @@ const ExistingAnswers = ({ questionId }) => {
           <CardContent className="p-6">
             <div className="flex items-start space-x-3">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={answer.authorAvatar || "/globe.svg"} />
+                <AvatarImage src={answer.user.image || "/globe.svg"} />
                 <AvatarFallback>{answer.user.username[0]}</AvatarFallback>
               </Avatar>
               <div className="flex-1">
