@@ -22,28 +22,14 @@ const Questionsfeed = ({refreshFlag}) => {
     };
     fetchQuestions();
   }, [user,refreshFlag]);
-  const handleUpvote = async (
-    type: string,
-    questionId: number,
-    userId: number
-  ) => {
-    console.log(type, questionId, userId);
-    try {
-      const response = await axios.post(`/${type}/upvote`, {
-        questionId,
-        userId,
-      });
-    } catch (error) {
-      console.error("Error upvoting question:", error);
-    }
-  };
+  
   return (
     <div className="space-y-6">
       {questions.map((question) => (
         <Card key={question.id} className="overflow-hidden hover:bg-slate-100/50">
           <Link href={`/question/${question.id}`}>
             <CardContent className="py-2 px-8">
-              <Questioncard handleUpvote={handleUpvote} question={question} />
+              <Questioncard question={question} />
             </CardContent>
           </Link>
         </Card>
