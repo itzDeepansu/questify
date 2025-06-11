@@ -1,59 +1,70 @@
-
 import prisma from "@/libs/prismaClient";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     const { questionId, userId, type } = await req.json();
-    if (type == "upvote") {
-      const alreadyUpvoted = await prisma.questionUpvote.findFirst({
+
+    if (!questionId || !userId || !["upvote", "downvote"].includes(type)) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+
+    if (type === "upvote") {
+      // Remove existing downvote if any
+      await prisma.questionDownvote.deleteMany({
+        where: { questionId, userId },
+      });
+
+      // Toggle upvote
+      const existing = await prisma.questionUpvote.findUnique({
         where: {
-          questionId,
-          userId,
+          userId_questionId: { userId, questionId },
         },
       });
 
-      if (alreadyUpvoted) {
+      if (existing) {
         await prisma.questionUpvote.delete({
-          where: {
-            id: alreadyUpvoted.id,
-          },
-        })
+          where: { userId_questionId: { userId, questionId } },
+        });
+        return NextResponse.json({ message: "Upvote removed" });
       }
+
       await prisma.questionUpvote.create({
-        data: {
-          questionId,
-          userId,
-        },
+        data: { questionId, userId },
       });
+
       return NextResponse.json({ message: "Upvoted successfully" });
-    } else if (type == "downvote") {
-      const alreadyUpvoted = await prisma.questionUpvote.findFirst({
+    }
+
+    if (type === "downvote") {
+      // Remove existing upvote if any
+      await prisma.questionUpvote.deleteMany({
+        where: { questionId, userId },
+      });
+
+      // Toggle downvote
+      const existing = await prisma.questionDownvote.findUnique({
         where: {
-          questionId,
-          userId,
+          userId_questionId: { userId, questionId },
         },
       });
 
-      if (alreadyUpvoted) {
-        await prisma.questionUpvote.delete({
-          where: {
-            id: alreadyUpvoted.id,
-          },
-        })
+      if (existing) {
+        await prisma.questionDownvote.delete({
+          where: { userId_questionId: { userId, questionId } },
+        });
+        return NextResponse.json({ message: "Downvote removed" });
       }
+
       await prisma.questionDownvote.create({
-        data: {
-          questionId,
-          userId,
-        },
+        data: { questionId, userId },
       });
+
       return NextResponse.json({ message: "Downvoted successfully" });
     }
 
-    return NextResponse.json({ message: "Wrong type of request" });
-  } catch (error: any) {
-    console.error("Error upvoting question:", error);
-    return NextResponse.json({ error: "Failed to upvote" }, { status: 500 });
+    return NextResponse.json({ error: "Invalid vote type" }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to process vote" }, { status: 500 });
   }
 }

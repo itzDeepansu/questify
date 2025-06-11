@@ -19,6 +19,7 @@ import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
+import DiscussionCard from "./Discussions/DiscussionCard";
 const ExistingDiscussions = ({ questionId , refreshFlag }) => {
   const { user } = useSessionContext();
   const [data, setData] = useState(null);
@@ -45,52 +46,7 @@ const ExistingDiscussions = ({ questionId , refreshFlag }) => {
   return (
     <div className="space-y-4">
       {data?.map((discussion) => (
-        <Card key={discussion.id}>
-          <CardContent className="p-4">
-            <div className="flex items-start space-x-3">
-              <Avatar className="w-8 h-8">
-                <AvatarImage src={discussion.user.image || "/globe.svg"} />
-                <AvatarFallback>{discussion.user.username[0]}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="font-semibold text-sm">
-                    {discussion.user.username}
-                  </span>
-                  <span className="text-gray-500 text-xs">
-                    {discussion.createdAt}
-                  </span>
-                </div>
-                <p className="text-gray-700 mb-3 text-sm leading-relaxed">
-                  {discussion.content}
-                </p>
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleUpvoteDiscussion(discussion.id)}
-                      disabled={discussion.alreadyUpvoted}
-                      className="flex items-center space-x-1 h-7 text-xs"
-                    >
-                      <ChevronUp className="w-3 h-3" />
-                      <span>{discussion.upvotes.length}</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7"
-                      disabled={discussion.alreadyDownvoted}
-                    >
-                      <ChevronDown className="w-3 h-3" />
-                      <span>{discussion.downvotes.length}</span>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <DiscussionCard discussion={discussion} key={discussion.id} />
       ))}
     </div>
   );

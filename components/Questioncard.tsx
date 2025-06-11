@@ -1,40 +1,12 @@
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { ChevronUp , ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
 import { useSessionContext } from "@/context/SessionContext";
 import axios from "@/libs/axios";
 const Questioncard = ({ question }) => {
   const { user } = useSessionContext();
-  const [isUpvoted, setIsUpvoted] = useState(question.alreadyUpvoted);
-  const [upvotes, setUpvotes] = useState(question._count.upvotes);
-  const [downvotes, setDownvotes] = useState(question._count.downvotes);
-  const [isDownvoted, setIsDownvoted] = useState(question.alreadyDownvoted);
-  const handleVote = async (
-    type: string,
-  ) => {
-    try {
-      if (type === "upvote") {
-        setIsUpvoted(true);
-        setUpvotes(upvotes + 1);
-        setIsDownvoted(false);
-        setDownvotes(downvotes - 1);
-      }else{
-        setIsUpvoted(false);
-        setUpvotes(upvotes - 1);
-        setIsDownvoted(true);
-        setDownvotes(downvotes + 1);
-      }
-      const response = await axios.post(`/question/vote`, {
-        type,
-        questionId : question.id,
-        userId : user.id,
-      });
-    } catch (error) {
-      console.error("Error upvoting question:", error);
-    }
-  };
 
   return (
     <div className="flex items-start space-x-3">
@@ -54,34 +26,20 @@ const Questioncard = ({ question }) => {
             <Button
               variant="ghost"
               size="sm"
-              disabled={isUpvoted || !user}
-              onClick={() => handleVote("upvote")}
+              disabled={true}
               className="flex items-center space-x-1"
             >
-              <ChevronUp
-                className={`w-4 h-4 ${
-                  isUpvoted
-                    ? "text-green-500"
-                    : "text-muted-foreground"
-                }`}
-              />
-              <span>{upvotes}</span>
+              <ChevronUp className={`w-4 h-4 `} />
+              <span>{question._count.upvotes}</span>
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              disabled={isUpvoted || !user}
-              onClick={() => handleVote("downvote")}
+              disabled={true}
               className="flex items-center space-x-1"
             >
-              <ChevronDown
-                className={`w-4 h-4 ${
-                  isDownvoted
-                    ? "text-green-500"
-                    : "text-muted-foreground"
-                }`}
-              />
-              <span>{downvotes}</span>
+              <ChevronDown className={`w-4 h-4 `} />
+              <span>{question._count.downvotes}</span>
             </Button>
           </div>
           <div className="flex space-x-2">

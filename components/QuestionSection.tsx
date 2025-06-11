@@ -20,8 +20,12 @@ import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
 const QuestionSection = ({ questionId }) => {
-    const [data, setData] = useState(null);
-    const {user} = useSessionContext();
+  const [data, setData] = useState(null);
+  const { user } = useSessionContext();
+  const [isUpvoted, setIsUpvoted] = useState(false);
+  const [upvotes, setUpvotes] = useState(0);
+  const [downvotes, setDownvotes] = useState(0);
+  const [isDownvoted, setIsDownvoted] = useState(false);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -30,6 +34,10 @@ const QuestionSection = ({ questionId }) => {
           userId: user.id,
         });
         setData(response.data);
+        setIsDownvoted(response.data.alreadyDownvoted);
+        setIsUpvoted(response.data.alreadyUpvoted);
+        setUpvotes(response.data.upvotes.length);
+        setDownvotes(response.data.downvotes.length);
         console.log(response.data);
       } catch (err: any) {
         console.log("Something went wrong");
@@ -37,8 +45,28 @@ const QuestionSection = ({ questionId }) => {
     };
     getData();
   }, [user?.id]);
-  const handleUpvoteQuestion = () => {
-    //upvote logic
+
+  const handleVote = async (type: string) => {
+    try {
+      if (type === "upvote") {
+        setIsUpvoted(true);
+        setUpvotes(upvotes + 1);
+        setIsDownvoted(false);
+        if(downvotes>0) setDownvotes(downvotes - 1);
+      } else {
+        setIsUpvoted(false);
+        if(upvotes>0) setUpvotes(upvotes - 1);
+        setIsDownvoted(true);
+        setDownvotes(downvotes + 1);
+      }
+      const response = await axios.post(`/question/vote`, {
+        type,
+        questionId,
+        userId: user.id,
+      });
+    } catch (error) {
+      console.error("Error upvoting question:", error);
+    }
   };
   return (
     <Card className="mb-6">
@@ -65,20 +93,32 @@ const QuestionSection = ({ questionId }) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={handleUpvoteQuestion}
+                      disabled={isUpvoted || !user}
+                      onClick={() => handleVote("upvote")}
                       className="flex items-center space-x-1"
-                      disabled={data?.alreadyUpvoted}
                     >
-                      <ChevronUp className="w-4 h-4" />
-                      <span>{data?.upvotes.length}</span>
+                      <ChevronUp
+                        className={`w-4 h-4 ${
+                          isUpvoted ? "text-green-500" : "text-muted-foreground"
+                        }`}
+                      />
+                      <span>{upvotes}</span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={data?.alreadyDownvoted}
+                      disabled={isDownvoted || !user}
+                      onClick={() => handleVote("downvote")}
+                      className="flex items-center space-x-1"
                     >
-                      <ChevronDown className="w-4 h-4" />
-                      <span>{data?.downvotes.length}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 ${
+                          isDownvoted
+                            ? "text-green-500"
+                            : "text-muted-foreground"
+                        }`}
+                      />
+                      <span>{downvotes}</span>
                     </Button>
                   </div>
                 </div>
