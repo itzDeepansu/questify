@@ -7,22 +7,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSessionContext } from "@/context/SessionContext";
 import toast from "react-hot-toast";
 import axios from "@/libs/axios";
-const Postquestion = ({answerRefreshTrigger}) => {
+import { Loader2 } from "lucide-react";
+const Postquestion = ({ answerRefreshTrigger }) => {
   const user = useSessionContext();
   const [newQuestion, setNewQuestion] = useState({
     title: "",
     content: "",
     tags: "",
   });
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmitQuestion = async () => {
     if (newQuestion.title && newQuestion.content) {
-      console.log("Question submitted:", newQuestion);
+      setSubmitting(true);
       const tagsArray = newQuestion.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
       const response = await axios.post("/question/postQuestion", {
-        userId: user.user.id ,
+        userId: user.user.id,
         title: newQuestion.title,
         body: newQuestion.content,
         topicNames: tagsArray,
@@ -31,22 +33,13 @@ const Postquestion = ({answerRefreshTrigger}) => {
         setNewQuestion({ title: "", content: "", tags: "" });
         toast.success("Question submitted successfully!");
         answerRefreshTrigger();
-      }else{
+      } else {
         toast.error("Error submitting question. Please try again.");
       }
+    } else {
+      toast.error("Title and content are required.");
     }
-    //   "userId": 3,
-    //   "title": "How to manage state in large React apps?",
-    //   "body": "What are some patterns or libraries for scalable state management?",
-    //   "topicNames": ["React", "State Management", "Best Practices"]
-    // content
-    // "nothing"
-
-    // tags
-    // "asdasdasd,asd,as,d,as,d,asd,as,d,asd,as,d,as"
-
-    // title
-    // "what is new"
+    setSubmitting(false);
   };
   return (
     <Card>
@@ -94,8 +87,12 @@ const Postquestion = ({answerRefreshTrigger}) => {
             >
               Cancel
             </Button>
-            <Button disabled={!user.user?.id} onClick={handleSubmitQuestion}>
-              Post Question
+            <Button disabled={!user.user?.id || submitting} onClick={handleSubmitQuestion}>
+              {submitting ? (
+                <Loader2 className="transform text-gray-400 w-4 h-4 animate-spin" />
+              ) : (
+                "Post Question"
+              )}
             </Button>
           </div>
         </CardContent>

@@ -1,24 +1,9 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import {
-  ArrowLeft,
-  ChevronUp,
-  ChevronDown,
-  MessageSquare,
-  Share,
-  Bookmark,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
+import { useState, useEffect } from "react";
+
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
-import { useParams } from "next/navigation";
 import DiscussionCard from "./Discussions/DiscussionCard";
 const ExistingDiscussions = ({ questionId , refreshFlag }) => {
   const { user } = useSessionContext();

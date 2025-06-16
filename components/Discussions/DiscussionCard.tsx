@@ -1,24 +1,12 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import {
-  ArrowLeft,
-  ChevronUp,
-  ChevronDown,
-  MessageSquare,
-  Share,
-  Bookmark,
-} from "lucide-react";
+import { useState } from "react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
+import { Card, CardContent } from "@/components/ui/card";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
-import { useParams } from "next/navigation";
 const DiscussionCard = ({ discussion }) => {
   const { user } = useSessionContext();
   const [isUpvoted, setIsUpvoted] = useState(discussion.alreadyUpvoted);
@@ -48,7 +36,7 @@ const DiscussionCard = ({ discussion }) => {
     }
   };
   return (
-    <Card >
+    <Card>
       <CardContent className="p-4">
         <div className="flex items-start space-x-3">
           <Avatar className="w-8 h-8">
@@ -74,7 +62,7 @@ const DiscussionCard = ({ discussion }) => {
                   size="sm"
                   onClick={() => handleVote("upvote")}
                   disabled={isUpvoted || !user}
-                  className="flex items-center space-x-1 h-7 text-xs"
+                  className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                 >
                   <ChevronUp
                     className={`w-4 h-4 ${
@@ -86,13 +74,14 @@ const DiscussionCard = ({ discussion }) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7"
+                  // className="h-7"
                   disabled={isDownvoted || !user}
+                  className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                   onClick={() => handleVote("downvote")}
                 >
                   <ChevronDown
                     className={`w-4 h-4 ${
-                      isDownvoted ? "text-green-500" : "text-muted-foreground"
+                      isDownvoted ? "text-red-500" : "text-muted-foreground"
                     }`}
                   />
                   <span>{downvotes}</span>

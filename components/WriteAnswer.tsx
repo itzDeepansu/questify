@@ -8,11 +8,14 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSessionContext } from "@/context/SessionContext";
 import axios from "@/libs/axios";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
-const WriteAnswer = ({ questionId , answerRefreshTrigger }) => {
+const WriteAnswer = ({ questionId, answerRefreshTrigger }) => {
   const [newAnswer, setNewAnswer] = useState("");
   const { user } = useSessionContext();
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmitAnswer = async () => {
+    setSubmitting(true);
     if (newAnswer.trim() === "") return;
     if (!user) return;
     try {
@@ -30,6 +33,7 @@ const WriteAnswer = ({ questionId , answerRefreshTrigger }) => {
       toast.error("Error submitting answer. Please try again.");
       console.error(err);
     }
+    setSubmitting(false);
   };
   return (
     <Card>
@@ -54,7 +58,11 @@ const WriteAnswer = ({ questionId , answerRefreshTrigger }) => {
                 Cancel
               </Button>
               <Button onClick={handleSubmitAnswer} disabled={!newAnswer.trim()}>
-                Submit Answer
+                {submitting ? (
+                  <Loader2 className="transform text-gray-400 w-4 h-4 animate-spin" />
+                ) : (
+                  "Post Answer"
+                )}
               </Button>
             </div>
           </div>

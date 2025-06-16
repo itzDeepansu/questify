@@ -72,7 +72,7 @@ const AnswerCard = ({ answer }) => {
                   size="sm"
                   disabled={isUpvoted || !user}
                   onClick={() => handleVote("upvote")}
-                  className="flex items-center space-x-1"
+                  className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                 >
                   <ChevronUp
                     className={`w-4 h-4 ${
@@ -84,12 +84,13 @@ const AnswerCard = ({ answer }) => {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                   disabled={isDownvoted || !user}
                   onClick={() => handleVote("downvote")}
                 >
                   <ChevronDown
                     className={`w-4 h-4 ${
-                      isDownvoted ? "text-green-500" : "text-muted-foreground"
+                      isDownvoted ? "text-red-500" : "text-muted-foreground"
                     }`}
                   />
                   <span>{downvotes}</span>

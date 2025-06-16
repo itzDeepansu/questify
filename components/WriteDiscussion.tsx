@@ -1,29 +1,20 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
-import {
-  ArrowLeft,
-  ChevronUp,
-  ChevronDown,
-  MessageSquare,
-  Share,
-  Bookmark,
-} from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
-import { useParams } from "next/navigation";
-import toast  from "react-hot-toast";
-const WriteDiscussion = ({ questionId ,discussionRefreshTrigger }) => {
+import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+const WriteDiscussion = ({ questionId, discussionRefreshTrigger }) => {
   const [newDiscussion, setNewDiscussion] = useState("");
   const { user } = useSessionContext();
+  const [submitting, setSubmitting] = useState(false);
   const handleSubmitDiscussion = async () => {
+    setSubmitting(true);
     if (newDiscussion.trim() === "") return;
     if (!user) return;
     try {
@@ -41,6 +32,7 @@ const WriteDiscussion = ({ questionId ,discussionRefreshTrigger }) => {
       toast.error("Error submitting answer. Please try again.");
       console.error(err);
     }
+    setSubmitting(false);
   };
   return (
     <Card>
@@ -68,7 +60,11 @@ const WriteDiscussion = ({ questionId ,discussionRefreshTrigger }) => {
                 onClick={handleSubmitDiscussion}
                 disabled={!newDiscussion.trim()}
               >
-                Post Discussion
+                {submitting ? (
+                  <Loader2 className="transform text-gray-400 w-4 h-4 animate-spin" />
+                ) : (
+                  "Post Discussion"
+                )}
               </Button>
             </div>
           </div>

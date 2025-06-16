@@ -2,25 +2,15 @@
 
 import { useState, useEffect } from "react";
 import {
-  ArrowLeft,
   ChevronUp,
   ChevronDown,
-  MessageSquare,
-  Share,
-  Bookmark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
+import { Card, CardContent } from "@/components/ui/card";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
-import { useParams } from "next/navigation";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
-import { time } from "console";
 const QuestionSection = ({ questionId }) => {
   const [data, setData] = useState(null);
   const { user } = useSessionContext();
@@ -76,8 +66,8 @@ const QuestionSection = ({ questionId }) => {
         <div className="space-y-4">
           <div className="flex items-start space-x-3">
             <Avatar className="w-12 h-12">
-              <AvatarImage src={data?.user?.image || "/globe.svg"} />
-              <AvatarFallback>{data?.user?.username}</AvatarFallback>
+              <AvatarImage src={data?.user?.image} />
+              <AvatarFallback>{data?.user?.username[0]}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
@@ -97,7 +87,7 @@ const QuestionSection = ({ questionId }) => {
                       size="sm"
                       disabled={isUpvoted || !user}
                       onClick={() => handleVote("upvote")}
-                      className="flex items-center space-x-1"
+                      className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >
                       <ChevronUp
                         className={`w-4 h-4 ${
@@ -111,12 +101,12 @@ const QuestionSection = ({ questionId }) => {
                       size="sm"
                       disabled={isDownvoted || !user}
                       onClick={() => handleVote("downvote")}
-                      className="flex items-center space-x-1"
+                      className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >
                       <ChevronDown
                         className={`w-4 h-4 ${
                           isDownvoted
-                            ? "text-green-500"
+                            ? "text-red-500"
                             : "text-muted-foreground"
                         }`}
                       />

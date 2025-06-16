@@ -1,13 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Search, Home, Users, BookOpen, Settings, Loader2 } from "lucide-react";
+import { Search, Home, Users, BookOpen, Settings, Loader2 , BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSessionContext } from "@/context/SessionContext";
 import Link from "next/link";
 import axios from "@/libs/axios";
-import { set } from "react-hook-form";
 const Navbar = ({ externalClasses = "" }) => {
   const { user } = useSessionContext();
   const [search, setSearch] = useState("");
@@ -99,11 +98,13 @@ const Navbar = ({ externalClasses = "" }) => {
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <img
-              src="/questify_logo.png"
-              alt="unable to load"
-              className="w-32"
-            />
+            <Link href="/" className="flex items-center">
+              <img
+                src="/questify_logo.png"
+                alt="unable to load"
+                className="w-32"
+              />
+            </Link>
             <nav className="hidden md:flex space-x-4">
               <Link
                 href="/"
@@ -114,17 +115,17 @@ const Navbar = ({ externalClasses = "" }) => {
               </Link>
               <Link
                 href="/"
-                className="flex items-center hover:bg-gray-200 rounded-md py-1 px-3 "
+                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
               >
                 <Users className="w-4 h-4 mr-2" />
-                Following
+                Users
               </Link>
               <Link
                 href="/"
-                className="flex items-center hover:bg-gray-200 rounded-md py-1 px-3"
+                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
               >
                 <BookOpen className="w-4 h-4 mr-2" />
-                Spaces
+                Topics
               </Link>
             </nav>
           </div>
@@ -177,12 +178,14 @@ const Navbar = ({ externalClasses = "" }) => {
           </div>
           <div className="flex items-center space-x-3">
             <Button variant="ghost" size="sm">
-              <Settings className="w-4 h-4" />
+              <BellRing className="w-4 h-4" />
             </Button>
-            <Avatar className="w-8 h-8">
-              <AvatarImage src={user?.image} />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
+            <Link href={`/user/${user?.id}`}>
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={user?.image} />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+            </Link>
           </div>
         </div>
       </div>
