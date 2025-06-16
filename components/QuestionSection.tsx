@@ -19,6 +19,8 @@ import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useParams } from "next/navigation";
+import { useTimeAgo } from "@/hooks/useTimeAgo";
+import { time } from "console";
 const QuestionSection = ({ questionId }) => {
   const [data, setData] = useState(null);
   const { user } = useSessionContext();
@@ -26,6 +28,7 @@ const QuestionSection = ({ questionId }) => {
   const [upvotes, setUpvotes] = useState(0);
   const [downvotes, setDownvotes] = useState(0);
   const [isDownvoted, setIsDownvoted] = useState(false);
+  const [timeAgo, setTimeAgo] = useState("");
   useEffect(() => {
     const getData = async () => {
       try {
@@ -38,14 +41,13 @@ const QuestionSection = ({ questionId }) => {
         setIsUpvoted(response.data.alreadyUpvoted);
         setUpvotes(response.data.upvotes.length);
         setDownvotes(response.data.downvotes.length);
-        console.log(response.data);
+        setTimeAgo(useTimeAgo(response.data.createdAt))
       } catch (err: any) {
         console.log("Something went wrong");
       }
     };
     getData();
   }, [user?.id]);
-
   const handleVote = async (type: string) => {
     try {
       if (type === "upvote") {
@@ -81,7 +83,7 @@ const QuestionSection = ({ questionId }) => {
               <div className="flex items-center space-x-2 mb-2">
                 <span className="font-semibold">{data?.user?.username}</span>
                 <span className="text-gray-500 text-sm">
-                  asked {data?.createdAt}
+                  asked {timeAgo}
                 </span>
               </div>
               <h1 className="text-2xl font-bold mb-3">{data?.title}</h1>
