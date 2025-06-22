@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { signOut } from "next-auth/react";
 import { User, Mail, Lock, Camera } from "lucide-react";
 
 import { useForm, SubmitHandler, set } from "react-hook-form";
@@ -313,6 +313,13 @@ const page = () => {
               >
                 Reset
               </Button>
+              <Button
+                type="button"
+                className="bg-transparent hover:bg-white/10 text-white border-white/30 backdrop-blur-sm transition-all duration-200"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
+                Logout
+              </Button>
             </div>
           </form>
 
@@ -322,8 +329,8 @@ const page = () => {
               <div className="text-white/60 text-sm">
                 {userData?.createdAt && (
                   <div>
-                    Created On : {" "}
-                    {new Date(userData.createdAt).toLocaleDateString('en-IN')}
+                    Created On :{" "}
+                    {new Date(userData.createdAt).toLocaleDateString("en-IN")}
                   </div>
                 )}
               </div>

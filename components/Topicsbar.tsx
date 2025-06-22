@@ -1,6 +1,7 @@
-import React from 'react'
-import { Card, CardContent , CardHeader } from "./ui/card";
+import React from "react";
+import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
+import Link from "next/link";
 const Topicsbar = () => {
   return (
     <div className="lg:col-span-1">
@@ -16,20 +17,23 @@ const Topicsbar = () => {
               "Career Advice",
               "Startup Tips",
               "Web Design",
+              "Postgresql",
             ].map((topic, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="w-full justify-start text-sm"
-              >
-                {topic}
-              </Button>
+              <Link href={`/topic/${topic}`} key={index}>
+                <Button
+                  key={index}
+                  variant="ghost"
+                  className="w-full justify-start text-sm"
+                >
+                  {topic}
+                </Button>
+              </Link>
             ))}
           </div>
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default Topicsbar
+export default Topicsbar;

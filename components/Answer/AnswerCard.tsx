@@ -1,24 +1,15 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState } from "react";
 import {
-  ArrowLeft,
   ChevronUp,
   ChevronDown,
-  MessageSquare,
-  Share,
-  Bookmark,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
-import { useParams } from "next/navigation";
 const AnswerCard = ({ answer }) => {
   const { user } = useSessionContext();
   const [isUpvoted, setIsUpvoted] = useState(answer.alreadyUpvoted);
@@ -79,7 +70,7 @@ const AnswerCard = ({ answer }) => {
                       isUpvoted ? "text-green-500" : "text-muted-foreground"
                     }`}
                   />
-                  <span>{upvotes}</span>
+                  <span className={`${isUpvoted ? "upvote-animate" : ""}`}>{upvotes}</span>
                 </Button>
                 <Button
                   variant="ghost"
@@ -93,7 +84,7 @@ const AnswerCard = ({ answer }) => {
                       isDownvoted ? "text-red-500" : "text-muted-foreground"
                     }`}
                   />
-                  <span>{downvotes}</span>
+                  <span className={`${isDownvoted ? "downvote-animate" : ""}`}>{downvotes}</span>
                 </Button>
               </div>
             </div>

@@ -69,7 +69,7 @@ const DiscussionCard = ({ discussion }) => {
                       isUpvoted ? "text-green-500" : "text-muted-foreground"
                     }`}
                   />
-                  <span>{upvotes}</span>
+                  <span className={`${isUpvoted ? "upvote-animate" : ""}`}>{upvotes}</span>
                 </Button>
                 <Button
                   variant="ghost"
@@ -84,7 +84,7 @@ const DiscussionCard = ({ discussion }) => {
                       isDownvoted ? "text-red-500" : "text-muted-foreground"
                     }`}
                   />
-                  <span>{downvotes}</span>
+                  <span className={`${isDownvoted ? "downvote-animate" : ""}`}>{downvotes}</span>
                 </Button>
               </div>
             </div>

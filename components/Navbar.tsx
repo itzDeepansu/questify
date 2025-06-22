@@ -121,7 +121,7 @@ const Navbar = ({ externalClasses = "" }) => {
                 Users
               </Link>
               <Link
-                href="/"
+                href="/topic"
                 className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
               >
                 <BookOpen className="w-4 h-4 mr-2" />

@@ -58,12 +58,56 @@
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: #605f5f;
-    height:10px;
+    height: 10px;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+  @keyframes upvoteAnimation {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    30% {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    60% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .upvote-animate {
+    animation: upvoteAnimation 0.6s ease-in-out;
+  }
+  @keyframes downvoteAnimation {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    30% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    60% {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .downvote-animate {
+    animation: downvoteAnimation 0.6s ease-in-out;
   }
 }
 

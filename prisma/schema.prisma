@@ -16,54 +16,56 @@ model temp {
 }
 
 model User {
-  id                    Int                    @id @default(autoincrement())
-  username              String                 @unique
-  email                 String                 @unique
-  passwordHash          String
-  image                 String?
-  createdAt             DateTime               @default(now())
-  answers               Answer[]
-  answerVotes           AnswerUpvote[]
-  answerDownvotes       AnswerDownvote[]
-  discussions           Discussion[]
-  discussionVotes       DiscussionUpvote[]
-  discussionDownvotes   DiscussionDownvote[]
-  notifications         Notification[]
-  questions             Question[]
-  questionVotes         QuestionUpvote[]
-  questionDownvotes     QuestionDownvote[]
-  interests             UserInterest[]
+  id                  Int                  @id @default(autoincrement())
+  username            String               @unique
+  email               String               @unique
+  passwordHash        String
+  createdAt           DateTime             @default(now())
+  image               String?
+  answers             Answer[]
+  answerDownvotes     AnswerDownvote[]
+  answerVotes         AnswerUpvote[]
+  discussions         Discussion[]
+  discussionDownvotes DiscussionDownvote[]
+  discussionVotes     DiscussionUpvote[]
+  notifications       Notification[]
+  questions           Question[]
+  questionDownvotes   QuestionDownvote[]
+  questionVotes       QuestionUpvote[]
+  interests           UserInterest[]
 }
 
 model Question {
-  id          Int                  @id @default(autoincrement())
+  id          Int                @id @default(autoincrement())
   userId      Int
   title       String
   body        String?
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   answers     Answer[]
   discussions Discussion[]
-  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  downvotes   QuestionDownvote[]
   topics      QuestionTopic[]
   upvotes     QuestionUpvote[]
-  downvotes   QuestionDownvote[]
 
   @@index([userId])
   @@index([createdAt])
+  @@index([body(ops: raw("gin_trgm_ops"))], map: "idx_question_body_trgm", type: Gin)
+  @@index([title(ops: raw("gin_trgm_ops"))], map: "idx_question_title_trgm", type: Gin)
 }
 
 model Answer {
-  id         Int             @id @default(autoincrement())
+  id         Int              @id @default(autoincrement())
   questionId Int
   userId     Int
   body       String
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
-  question   Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes    AnswerUpvote[]
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  question   Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   downvotes  AnswerDownvote[]
+  upvotes    AnswerUpvote[]
 
   @@index([questionId])
   @@index([userId])
@@ -79,8 +81,8 @@ model Discussion {
   updatedAt  DateTime             @updatedAt
   question   Question             @relation(fields: [questionId], references: [id], onDelete: Cascade)
   user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  upvotes    DiscussionUpvote[]
   downvotes  DiscussionDownvote[]
+  upvotes    DiscussionUpvote[]
 
   @@index([questionId])
   @@index([userId])
@@ -90,6 +92,7 @@ model Discussion {
 model Topic {
   id            Int             @id @default(autoincrement())
   name          String          @unique
+  image         String?         @default("")
   questionTags  QuestionTopic[]
   userInterests UserInterest[]
 }
@@ -176,4 +179,9 @@ model Notification {
 
   @@index([userId])
   @@index([read])
+}
+
+model alive {
+  id        BigInt   @id @default(autoincrement())
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
 }
