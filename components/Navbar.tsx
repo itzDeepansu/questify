@@ -1,23 +1,39 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Search, Home, Users, BookOpen, Settings, Loader2 , BellRing } from "lucide-react";
+import {
+  Search,
+  Home,
+  Users,
+  BookOpen,
+  Settings,
+  Loader2,
+  BellRing,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSessionContext } from "@/context/SessionContext";
 import Link from "next/link";
 import axios from "@/libs/axios";
+import NotificationsPanel from "./NotificationsPanel";
+import { useRealtimeNotifications } from "@/hooks/useRealTimeNotifications";
+import { set } from "react-hook-form";
 const Navbar = ({ externalClasses = "" }) => {
   const { user } = useSessionContext();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const isFirstRender = useRef(true);
   const searchDropdownRef = useRef<HTMLDivElement>(null);
+  const notificationPanelRef = useRef<HTMLDivElement>(null);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [results, setResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [nextCursor, setNextCursor] = useState(null);
   const [hasMore, setHasMore] = useState(false);
+  const [showNotificationDropdown, setShowNotificationDropdown] =
+    useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [newNotification, setNewNotification] = useState(false);
   // Debounce effect
   useEffect(() => {
     if (isFirstRender.current) {
@@ -71,10 +87,24 @@ const Navbar = ({ externalClasses = "" }) => {
         setIsSearching(false);
         setSearch("");
       }
+      if (
+        notificationPanelRef.current &&
+        !notificationPanelRef.current.contains(e.target)
+      ) {
+        setShowNotificationDropdown(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  if (user)
+    useRealtimeNotifications(
+      user.id,
+      notifications,
+      setNotifications,
+      setNewNotification
+    );
+
   const loadMore = async () => {
     try {
       setIsSearching(true);
@@ -90,6 +120,9 @@ const Navbar = ({ externalClasses = "" }) => {
     } finally {
       setIsSearching(false);
     }
+  };
+  const toggleNotificationDropdown = () => {
+    setShowNotificationDropdown(!showNotificationDropdown);
   };
   return (
     <header
@@ -176,10 +209,28 @@ const Navbar = ({ externalClasses = "" }) => {
               </div>
             )}
           </div>
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="sm">
+          <div className="flex items-center space-x-3 relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="relative"
+              onClick={() => toggleNotificationDropdown()}
+            >
               <BellRing className="w-4 h-4" />
+              {newNotification && (
+                <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></div>
+              )}
             </Button>
+            {showNotificationDropdown && (
+              <div ref={notificationPanelRef}>
+                <NotificationsPanel
+                  user={user}
+                  notifications={notifications}
+                  setNotifications={setNotifications}
+                  setNewNotification={setNewNotification}
+                />
+              </div>
+            )}
             <Link href={`/user/${user?.id}`}>
               <Avatar className="w-8 h-8">
                 <AvatarImage src={user?.image} />
