@@ -42,7 +42,7 @@ const TopicQuestionFeed = () => {
     };
 
     fetchQuestions();
-  }, [user, page]);
+  }, [user, page,topic]);
 
   const handleLoadMore = () => {
     if (hasMore) {

@@ -26,7 +26,7 @@ const DiscussionCard = ({ discussion }) => {
         setIsDownvoted(true);
         setDownvotes(downvotes + 1);
       }
-      const response = await axios.post(`/discussion/vote`, {
+      await axios.post(`/discussion/vote`, {
         type,
         discussionId: discussion.id,
         userId: discussion.user.id,

@@ -29,12 +29,12 @@ const QuestionSection = ({ questionId }) => {
         setUpvotes(response.data.upvotes.length);
         setDownvotes(response.data.downvotes.length);
         setTimeAgo(useTimeAgo(response.data.createdAt));
-      } catch (err: any) {
-        console.log("Something went wrong");
+      } catch (err) {
+        console.log("Something went wrong",err);
       }
     };
     getData();
-  }, [user?.id]);
+  }, [user?.id,questionId]);
   const handleVote = async (type: string) => {
     try {
       if (type === "upvote") {
@@ -48,7 +48,7 @@ const QuestionSection = ({ questionId }) => {
         setIsDownvoted(true);
         setDownvotes(downvotes + 1);
       }
-      const response = await axios.post(`/question/vote`, {
+      await axios.post(`/question/vote`, {
         type,
         questionId,
         userId: user.id,

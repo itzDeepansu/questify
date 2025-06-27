@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "./ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
-import { useSessionContext } from "@/context/SessionContext";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
 const Questioncard = ({ question }) => {
-  const { user } = useSessionContext();
   const timeAgo = useTimeAgo(question.createdAt);
   return (
     <div className="flex items-start space-x-3 relative">

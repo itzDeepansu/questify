@@ -16,16 +16,13 @@ const ExistingAnswers = ({ questionId ,refreshFlag }) => {
           userId: user.id,
         });
         setData(response.data);
-        console.log(response.data);
-      } catch (err: any) {
-        console.log("Something went wrong");
+      } catch (err) {
+        console.log("Something went wrong",err);
       }
     };
     getData();
-  }, [user,refreshFlag]);
-  const handleUpvoteAnswer = async (answerId) => {
-    //logic here
-  };
+  }, [user,refreshFlag,questionId]);
+ 
   return (
     <div className="space-y-6">
       {data?.map((answer) => (

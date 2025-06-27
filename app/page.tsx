@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Postquestion from "@/components/Postquestion";
@@ -9,7 +9,7 @@ import Topicsbar from "@/components/Topicsbar";
 import { CircleLoader } from "react-spinners";
 export default function Home() {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const {  status } = useSession();
   const [answerRefreshFlag, setAnswerRefreshFlag] = useState(false);
   const [loading, setLoading] = useState(true);
   const answerRefreshTrigger = () => {

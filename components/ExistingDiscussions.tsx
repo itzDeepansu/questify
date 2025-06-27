@@ -19,15 +19,13 @@ const ExistingDiscussions = ({ questionId , refreshFlag }) => {
         });
         setData(response.data);
         console.log(response.data);
-      } catch (err: any) {
-        console.log("Something went wrong");
+      } catch (err) {
+        console.log("Something went wrong",err);
       }
     }
     getData();
-  },[user,refreshFlag])
-  const handleUpvoteDiscussion = async (discussionId) => {
-    //LOGIC GOES HERE
-  }
+  },[user,refreshFlag,questionId])
+ 
   return (
     <div className="space-y-4">
       {data?.map((discussion) => (

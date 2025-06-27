@@ -6,7 +6,7 @@ import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import Link from "next/link";
 
-const Questionsfeed = ({ refreshFlag }: { refreshFlag: any }) => {
+const Questionsfeed = ({ refreshFlag }) => {
   const { user } = useSessionContext();
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);

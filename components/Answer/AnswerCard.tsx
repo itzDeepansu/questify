@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 const AnswerCard = ({ answer }) => {
@@ -29,7 +29,7 @@ const AnswerCard = ({ answer }) => {
         setIsDownvoted(true);
         setDownvotes(downvotes + 1);
       }
-      const response = await axios.post(`/answer/vote`, {
+      await axios.post(`/answer/vote`, {
         type,
         answerId: answer.id,
         userId: answer.user.id,

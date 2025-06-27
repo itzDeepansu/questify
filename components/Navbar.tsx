@@ -5,7 +5,6 @@ import {
   Home,
   Users,
   BookOpen,
-  Settings,
   Loader2,
   BellRing,
 } from "lucide-react";
@@ -17,7 +16,6 @@ import Link from "next/link";
 import axios from "@/libs/axios";
 import NotificationsPanel from "./NotificationsPanel";
 import { useRealtimeNotifications } from "@/hooks/useRealTimeNotifications";
-import { set } from "react-hook-form";
 const Navbar = ({ externalClasses = "" }) => {
   const { user } = useSessionContext();
   const [search, setSearch] = useState("");

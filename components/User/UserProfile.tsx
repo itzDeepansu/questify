@@ -172,7 +172,7 @@ function StatCard({
   );
 }
 
-function ContentCard({ title, createdAt, votes, content,link }: any) {
+function ContentCard({ title, createdAt, votes,link }) {
   return (
     <Link href={`/question/${link}`} className="block ">
       <div className="bg-white border rounded-xl p-6 shadow hover:shadow-md transition-all hover:bg-[#ecb7327b] duration-500 ease-in-out hover:scale-102">
@@ -183,12 +183,6 @@ function ContentCard({ title, createdAt, votes, content,link }: any) {
             <ThumbsUp className="w-4 h-4" /> {votes}
           </span>
         </div>
-        {content && (
-          <p className="text-gray-700 text-sm">
-            {content.slice(0, 150)}
-            {content.length > 150 ? "..." : ""}
-          </p>
-        )}
       </div>
     </Link>
   );
