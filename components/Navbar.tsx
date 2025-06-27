@@ -141,21 +141,21 @@ const Navbar = ({ externalClasses = "" }) => {
             <nav className="hidden md:flex space-x-4">
               <Link
                 href="/"
-                className="flex items-center  rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
+                className="flex items-center  rounded-md py-1 px-3 hover:bg-[#ecb7327b] transition-colors duration-500 ease-in-out"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Home
               </Link>
               <Link
                 href="/users"
-                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
+                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb7327b] transition-colors duration-500 ease-in-out"
               >
                 <Users className="w-4 h-4 mr-2" />
                 Users
               </Link>
               <Link
                 href="/topic"
-                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
+                className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb7327b] transition-colors duration-500 ease-in-out"
               >
                 <BookOpen className="w-4 h-4 mr-2" />
                 Topics
@@ -188,7 +188,7 @@ const Navbar = ({ externalClasses = "" }) => {
                 {results.map((question) => (
                   <Link
                     href={`/question/${question.id}`}
-                    className="p-4 hover:bg-[#ecb632] block transition-colors duration-500 ease-in-out"
+                    className="p-4 hover:bg-[#ecb7327b] block transition-colors duration-500 ease-in-out"
                     key={question.id}
                   >
                     {question.title}
@@ -213,7 +213,7 @@ const Navbar = ({ externalClasses = "" }) => {
             <Button
               variant="ghost"
               size="sm"
-              className="relative"
+              className="relative hover:bg-[#ecb7327b] transition-colors duration-500 ease-in-out cursor-pointer"
               onClick={() => toggleNotificationDropdown()}
             >
               <BellRing className="w-4 h-4" />

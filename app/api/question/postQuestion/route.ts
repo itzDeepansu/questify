@@ -4,7 +4,7 @@ import prisma from '@/libs/prismaClient';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { userId, title, body: questionBody, topicNames } = body;
+    const { userId, title, body: questionBody, topicNames,image } = body;
     console.log(body);
     if (!userId || !title || !Array.isArray(topicNames)) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
             topic: { connect: { id: topic.id } },
           })),
         },
+        image:image
       },
       include: {
         user: { select: { id: true, username: true, image: true } },

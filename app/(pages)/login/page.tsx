@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
-
+import { Eye, EyeOff } from "lucide-react";
 interface LoginFormInputs {
   email: string;
   password: string;
@@ -20,7 +20,7 @@ const Login = () => {
   const { register, handleSubmit } = useForm<LoginFormInputs>();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleLogin = async (credentials: LoginFormInputs) => {
     setSubmitting(true);
     setError(null);
@@ -51,15 +51,15 @@ const Login = () => {
 
   if (submitting) {
     return (
-      <div className="bg-black flex justify-center items-center h-[100vh] w-[100vw] transition-all duration-1000">
-        <CircleLoader color="#ffffff" loading={submitting} size={400} />
+      <div className="bg-white flex justify-center items-center h-[100vh] w-[100vw] transition-all duration-1000">
+        <CircleLoader color="#000000" loading={submitting} size={400} />
       </div>
     );
   }
 
   return (
-    <div className="w-screen min-h-[100dvh] flex flex-col-reverse lg:flex-row bg-[#171717] text-white justify-center items-center">
-      <div className="flex items-center justify-center py-12">
+    <div className="w-screen min-h-[100dvh] flex flex-col-reverse lg:flex-row text-black bg-[#f5f5f5] justify-center items-center">
+      <div className="flex items-center justify-center py-20 rounded-xl px-8 border border-gray-300 bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto grid w-[350px] gap-6"
@@ -78,11 +78,11 @@ const Login = () => {
                 type="text"
                 placeholder="alice@example.com"
                 required
-                className="rounded-[3px] placeholder:text-[#817e7e]"
+                className="rounded-[3px] placeholder:text-[#817e7e] border-gray-300"
                 {...register("email")}
               />
             </div>
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
@@ -94,18 +94,34 @@ const Login = () => {
               </div>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
-                className="rounded-[3px]"
+                placeholder="**********"
+                className="rounded-[3px] border-gray-300"
                 {...register("password")}
               />
+              <div className="absolute right-4 top-[58%]">
+                {showPassword ? (
+                  <Eye
+                    size={15}
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <EyeOff
+                    size={15}
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                )}
+              </div>
             </div>
             {error && (
               <div className="text-red-500 text-sm text-center">{error}</div>
             )}
             <Button
               type="submit"
-              className="w-full bg-white text-black hover:text-white rounded-[3px]"
+              className="w-full bg-black text-white hover:bg-gray-800 border cursor-pointer border-gray-300 transition-colors rounded-[3px]"
             >
               Login
             </Button>
@@ -122,7 +138,7 @@ const Login = () => {
         <img
           src="/questify_logo.png"
           alt="logo"
-          className="-translate-x-3 xl:translate-x-44 h-full w-full object-cover"
+          className="-translate-x-3 xl:translate-x-32 h-full w-full object-cover"
         />
       </div>
     </div>

@@ -83,7 +83,7 @@ const NotificationsPanel = ({
         <div className="p-4 text-center text-gray-500">No Notifications</div>
       )}
       {isSearching && (
-        <Loader2 className="text-gray-400 w-10 h-10 animate-spin" />
+        <Loader2 className="text-gray-400 w-10 h-10 animate-spin ml-auto mr-auto py-2" />
       )}
     </div>
   );

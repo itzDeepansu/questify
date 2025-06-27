@@ -4,13 +4,12 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
 import { useSessionContext } from "@/context/SessionContext";
-import axios from "@/libs/axios";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
 const Questioncard = ({ question }) => {
   const { user } = useSessionContext();
   const timeAgo = useTimeAgo(question.createdAt);
   return (
-    <div className="flex items-start space-x-3">
+    <div className="flex items-start space-x-3 relative">
       <Avatar className="w-10 h-10">
         <AvatarImage src={question.user.image} />
         <AvatarFallback>{question.user.username[0]}</AvatarFallback>
@@ -52,6 +51,13 @@ const Questioncard = ({ question }) => {
           </div>
         </div>
       </div>
+      {question.image && (
+        <img
+          src={question.image}
+          alt="no image"
+          className="max-h-32 ml-auto rounded-sm"
+        />
+      )}
     </div>
   );
 };

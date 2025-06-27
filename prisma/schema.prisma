@@ -43,6 +43,7 @@ model Question {
   body        String?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  image       String?
   answers     Answer[]
   discussions Discussion[]
   user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)

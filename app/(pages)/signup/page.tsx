@@ -14,6 +14,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { CircleLoader } from "react-spinners";
 import type { UploadFile } from "antd/es/upload/interface";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 interface FormValues {
   username: string;
@@ -46,7 +47,7 @@ const Signup = () => {
 
   const { register, handleSubmit } = useForm<FormValues>();
   const router = useRouter();
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleChange: UploadProps["onChange"] = (info: UploadChangeParam) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -105,12 +106,12 @@ const Signup = () => {
         setFormError("Registration failed. Please try again.");
       }
     } catch (err) {
-        if(err.status === 409){
-            toast.error("User already exists. Please login.");
-        }else{
-            console.error(err.status);
-            setFormError("An unexpected error occurred. Please try again.");
-        }
+      if (err.status === 409) {
+        toast.error("User already exists. Please login.");
+      } else {
+        console.error(err.status);
+        setFormError("An unexpected error occurred. Please try again.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -118,15 +119,15 @@ const Signup = () => {
 
   if (submitting) {
     return (
-      <div className="bg-black flex justify-center items-center h-[100vh] w-[100vw]">
-        <CircleLoader color="#ffffff" loading={submitting} size={400} />
+      <div className="flex justify-center items-center h-[100vh] w-[100vw]">
+        <CircleLoader color="#000000" loading={submitting} size={400} />
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-[100dvh] flex flex-col-reverse lg:flex-row bg-[#171717] text-white justify-center items-center">
-      <div className="flex items-center justify-center py-12">
+    <div className="w-full min-h-[100dvh] flex flex-col-reverse lg:flex-row justify-center items-center bg-[#f5f5f5]">
+      <div className="flex items-center justify-center py-16 px-8 border border-gray-300 rounded-2xl bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto grid w-[350px] gap-6"
@@ -138,11 +139,11 @@ const Signup = () => {
             </p>
           </div>
           <div className="grid gap-4">
-            <div className="flex justify-center items-center invert">
+            <div className="flex justify-center items-center">
               <Upload
                 name="avatar"
                 listType="picture-circle"
-                className="avatar-uploader"
+                className="avatar-uploader overflow-hidden rounded-full"
                 showUploadList={false}
                 customRequest={handleUpload}
                 onChange={handleChange}
@@ -151,7 +152,7 @@ const Signup = () => {
                   <img
                     src={imageUrl}
                     alt="avatar"
-                    className="invert rounded-full object-fill"
+                    className="rounded-full object-fill"
                   />
                 ) : (
                   uploadButton
@@ -168,7 +169,7 @@ const Signup = () => {
                 type="text"
                 placeholder="Deepansu"
                 required
-                className="rounded-[3px] placeholder:text-[#817e7e]"
+                className="rounded-[3px] placeholder:text-[#817e7e] border-gray-300"
                 {...register("username")}
               />
             </div>
@@ -179,26 +180,41 @@ const Signup = () => {
                 type="text"
                 required
                 placeholder="alice@gmail.com"
-                className="rounded-[3px] placeholder:text-[#817e7e]"
+                className="rounded-[3px] placeholder:text-[#817e7e] border-gray-300"
                 {...register("email")}
               />
             </div>
-            <div className="grid gap-2">
+            <div className="grid gap-2 relative">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
-                className="rounded-[3px]"
+                className="rounded-[3px] border-gray-300"
                 {...register("password")}
               />
+              <div className="absolute right-4 top-[58%]">
+                {showPassword ? (
+                  <Eye
+                    size={15}
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                ) : (
+                  <EyeOff
+                    size={15}
+                    className="cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                )}
+              </div>
             </div>
             {formError && (
               <p className="text-red-500 text-sm text-center">{formError}</p>
             )}
             <Button
               type="submit"
-              className="w-full bg-white text-black hover:text-white rounded-[3px]"
+              className="w-full bg-black text-white hover:bg-gray-800 border cursor-pointer border-gray-300 transition-colors rounded-[3px]"
             >
               Sign Up
             </Button>
@@ -215,7 +231,7 @@ const Signup = () => {
         <img
           src="/questify_logo.png"
           alt="logo"
-          className="-translate-x-3 xl:translate-x-44 h-full w-full object-cover"
+          className="-translate-x-3 xl:translate-x-32 h-full w-full object-cover"
         />
       </div>
     </div>

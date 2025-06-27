@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,7 +28,7 @@ const QuestionSection = ({ questionId }) => {
         setIsUpvoted(response.data.alreadyUpvoted);
         setUpvotes(response.data.upvotes.length);
         setDownvotes(response.data.downvotes.length);
-        setTimeAgo(useTimeAgo(response.data.createdAt))
+        setTimeAgo(useTimeAgo(response.data.createdAt));
       } catch (err: any) {
         console.log("Something went wrong");
       }
@@ -44,10 +41,10 @@ const QuestionSection = ({ questionId }) => {
         setIsUpvoted(true);
         setUpvotes(upvotes + 1);
         setIsDownvoted(false);
-        if(downvotes>0) setDownvotes(downvotes - 1);
+        if (downvotes > 0) setDownvotes(downvotes - 1);
       } else {
         setIsUpvoted(false);
-        if(upvotes>0) setUpvotes(upvotes - 1);
+        if (upvotes > 0) setUpvotes(upvotes - 1);
         setIsDownvoted(true);
         setDownvotes(downvotes + 1);
       }
@@ -55,9 +52,9 @@ const QuestionSection = ({ questionId }) => {
         type,
         questionId,
         userId: user.id,
-        actor_image:data.user.image,
-        actor_username:data.user.username,
-        actorId:data.user.id,
+        actor_image: data.user.image,
+        actor_username: data.user.username,
+        actorId: data.user.id,
       });
     } catch (error) {
       console.error("Error upvoting question:", error);
@@ -67,7 +64,7 @@ const QuestionSection = ({ questionId }) => {
     <Card className="mb-6">
       <CardContent className="p-6">
         <div className="space-y-4">
-          <div className="flex items-start space-x-3">
+          <div className="flex items-start space-x-3 relative">
             <Avatar className="w-12 h-12">
               <AvatarImage src={data?.user?.image} />
               <AvatarFallback>{data?.user?.username[0]}</AvatarFallback>
@@ -75,9 +72,7 @@ const QuestionSection = ({ questionId }) => {
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
                 <span className="font-semibold">{data?.user?.username}</span>
-                <span className="text-gray-500 text-sm">
-                  asked {timeAgo}
-                </span>
+                <span className="text-gray-500 text-sm">asked {timeAgo}</span>
               </div>
               <h1 className="text-2xl font-bold mb-3">{data?.title}</h1>
               <p className="text-gray-700 mb-4 leading-relaxed">{data?.body}</p>
@@ -88,7 +83,9 @@ const QuestionSection = ({ questionId }) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={isUpvoted || !user || data?.user?.id === user.id}
+                      disabled={
+                        isUpvoted || !user || data?.user?.id === user.id
+                      }
                       onClick={() => handleVote("upvote")}
                       className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >
@@ -97,23 +94,29 @@ const QuestionSection = ({ questionId }) => {
                           isUpvoted ? "text-green-500" : "text-muted-foreground"
                         }`}
                       />
-                      <span className={`${isUpvoted ? "upvote-animate" : ""}`}>{upvotes}</span>
+                      <span className={`${isUpvoted ? "upvote-animate" : ""}`}>
+                        {upvotes}
+                      </span>
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={isDownvoted || !user || data?.user?.id === user.id}
+                      disabled={
+                        isDownvoted || !user || data?.user?.id === user.id
+                      }
                       onClick={() => handleVote("downvote")}
                       className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >
                       <ChevronDown
                         className={`w-4 h-4 ${
-                          isDownvoted
-                            ? "text-red-500"
-                            : "text-muted-foreground"
+                          isDownvoted ? "text-red-500" : "text-muted-foreground"
                         }`}
                       />
-                      <span className={`${isDownvoted ? "downvote-animate" : ""}`}>{downvotes}</span>
+                      <span
+                        className={`${isDownvoted ? "downvote-animate" : ""}`}
+                      >
+                        {downvotes}
+                      </span>
                     </Button>
                   </div>
                 </div>
@@ -127,6 +130,13 @@ const QuestionSection = ({ questionId }) => {
                     ))}
                   </div> */}
             </div>
+            {data?.image && (
+              <img
+                src={data?.image}
+                alt="no image"
+                className="max-h-32 ml-auto rounded-sm"
+              />
+            )}
           </div>
         </div>
       </CardContent>

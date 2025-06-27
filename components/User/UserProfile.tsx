@@ -11,6 +11,7 @@ import {
   MessageCircle,
   ThumbsUp,
 } from "lucide-react";
+import { CircleLoader } from "react-spinners";
 import Link from "next/link";
 const UserProfile = () => {
   const params = useParams();
@@ -33,7 +34,13 @@ const UserProfile = () => {
     };
     fetchUser();
   }, [userId]);
-  if (loading) return <div className="p-8">Loading...</div>;
+   if (loading) {
+    return (
+      <div className="flex justify-center items-center h-full w-full">
+        <CircleLoader color="#000000" loading={loading} size={400} />
+      </div>
+    );
+  }
   if (!user) return <div className="p-8">User not found</div>;
   return (
     <div className="max-w-5xl mx-auto p-4">

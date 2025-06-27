@@ -14,6 +14,7 @@ import axios from "@/libs/axios";
 import type { UploadFile } from "antd/es/upload/interface";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
+import { CircleLoader } from "react-spinners";
 interface FormValues {
   username: string;
   email: string;
@@ -45,6 +46,7 @@ const page = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [userData, setUserData] = useState(null);
+  const [pageLoading ,setPageLoading] = useState(true);
   const {
     register,
     handleSubmit,
@@ -77,6 +79,7 @@ const page = () => {
       } catch (err) {
         console.error("Failed to fetch user:", err);
       }
+      setPageLoading(false);
     };
 
     fetchUser();
@@ -164,11 +167,18 @@ const page = () => {
     reset();
     setImageUrl(userData.image);
   };
+   if (pageLoading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh] w-[100vw]">
+        <CircleLoader color="#000000" loading={pageLoading} size={400} />
+      </div>
+    );
+  }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#eab530] to-[#d4465b] p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-[rgb(234,181,48)] to-[#d4465b] flex items-center justify-center">
       <div className="w-full max-w-md">
         {/* Glassmorphism Container */}
-        <div className="backdrop-blur-2xl bg-black/20 rounded-3xl p-8 shadow-2xl border border-white/30">
+        <div className="backdrop-blur-2xl bg-black/20 rounded-3xl px-8 py-5 shadow-2xl border border-white/30">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">User Profile</h1>
             <p className="text-white/80">Manage your account details</p>
