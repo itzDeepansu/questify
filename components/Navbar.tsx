@@ -147,7 +147,7 @@ const Navbar = ({ externalClasses = "" }) => {
                 Home
               </Link>
               <Link
-                href="/"
+                href="/users"
                 className="flex items-center rounded-md py-1 px-3 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
               >
                 <Users className="w-4 h-4 mr-2" />
@@ -231,7 +231,7 @@ const Navbar = ({ externalClasses = "" }) => {
                 />
               </div>
             )}
-            <Link href={`/user/${user?.id}`}>
+            <Link href={`/users/self/${user?.id}`}>
               <Avatar className="w-8 h-8">
                 <AvatarImage src={user?.image} />
                 <AvatarFallback>U</AvatarFallback>
