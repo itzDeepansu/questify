@@ -9,20 +9,20 @@ import Topicsbar from "@/components/Topicsbar";
 import { CircleLoader } from "react-spinners";
 export default function Home() {
   const router = useRouter();
-  const {  status } = useSession();
+  const { data:session,  status } = useSession();
   const [answerRefreshFlag, setAnswerRefreshFlag] = useState(false);
   const [loading, setLoading] = useState(true);
   const answerRefreshTrigger = () => {
     setAnswerRefreshFlag((prev) => !prev);
   };
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (!session?.user) {
       router.push("/login");
     }
     if (status === "authenticated") {
       setLoading(false);
     }
-  }, [status, router]);
+  }, [ router]);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[100vh] w-[100vw]">
