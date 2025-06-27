@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
         userId,
       },
     })
-
+    
     return NextResponse.json({ message: 'Upvoted successfully' })
   } catch (error: any) {
     if (error.code === 'P2002') {

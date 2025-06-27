@@ -29,7 +29,10 @@ const DiscussionCard = ({ discussion }) => {
       const response = await axios.post(`/discussion/vote`, {
         type,
         discussionId: discussion.id,
-        userId: user.id,
+        userId: discussion.user.id,
+        actor_image: user.image,
+        actor_username: user.username,
+        actorId: user.id,
       });
     } catch (error) {
       console.error("Error upvoting question:", error);
@@ -61,7 +64,7 @@ const DiscussionCard = ({ discussion }) => {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleVote("upvote")}
-                  disabled={isUpvoted || !user}
+                  disabled={isUpvoted || !user || user.id === discussion.user.id}
                   className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                 >
                   <ChevronUp
@@ -75,7 +78,7 @@ const DiscussionCard = ({ discussion }) => {
                   variant="ghost"
                   size="sm"
                   // className="h-7"
-                  disabled={isDownvoted || !user}
+                  disabled={isDownvoted || !user || user.id === discussion.user.id}
                   className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                   onClick={() => handleVote("downvote")}
                 >

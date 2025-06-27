@@ -55,6 +55,9 @@ const QuestionSection = ({ questionId }) => {
         type,
         questionId,
         userId: user.id,
+        actor_image:data.user.image,
+        actor_username:data.user.username,
+        actorId:data.user.id,
       });
     } catch (error) {
       console.error("Error upvoting question:", error);
@@ -85,7 +88,7 @@ const QuestionSection = ({ questionId }) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={isUpvoted || !user}
+                      disabled={isUpvoted || !user || data?.user?.id === user.id}
                       onClick={() => handleVote("upvote")}
                       className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >
@@ -99,7 +102,7 @@ const QuestionSection = ({ questionId }) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={isDownvoted || !user}
+                      disabled={isDownvoted || !user || data?.user?.id === user.id}
                       onClick={() => handleVote("downvote")}
                       className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                     >

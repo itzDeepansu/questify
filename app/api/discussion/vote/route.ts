@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { discussionId, userId, type } = await req.json();
+    const { discussionId, userId, type, actor_image, actor_username, actorId } =
+      await req.json();
 
     if (!discussionId || !userId || !["upvote", "downvote"].includes(type)) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
@@ -14,23 +15,27 @@ export async function POST(req: NextRequest) {
       await prisma.discussionDownvote.deleteMany({
         where: { discussionId, userId },
       });
-
-      // Toggle upvote
-      const existing = await prisma.discussionUpvote.findUnique({
-        where: {
-          userId_discussionId: { userId, discussionId },
-        },
-      });
-
-      if (existing) {
-        await prisma.discussionUpvote.delete({
-          where: { userId_discussionId: { userId, discussionId } },
-        });
-        return NextResponse.json({ message: "Upvote removed" });
-      }
-
       await prisma.discussionUpvote.create({
         data: { discussionId, userId },
+      });
+      const { questionId } = await prisma.discussion.findUnique({
+        where: {
+          id: discussionId,
+        },
+        select: {
+          questionId: true,
+        },
+      });
+      await prisma.notification.create({
+        data: {
+          userId: userId,
+          actorId: actorId,
+          content: "Upvoted your discussion",
+          actor_username,
+          actor_image,
+          type: "discussion",
+          type_id: questionId,
+        },
       });
 
       return NextResponse.json({ message: "Upvoted successfully" });
@@ -41,25 +46,28 @@ export async function POST(req: NextRequest) {
       await prisma.discussionUpvote.deleteMany({
         where: { discussionId, userId },
       });
-
-      // Toggle downvote
-      const existing = await prisma.discussionDownvote.findUnique({
-        where: {
-          userId_discussionId: { userId, discussionId },
-        },
-      });
-
-      if (existing) {
-        await prisma.discussionDownvote.delete({
-          where: { userId_discussionId: { userId, discussionId } },
-        });
-        return NextResponse.json({ message: "Downvote removed" });
-      }
-
       await prisma.discussionDownvote.create({
         data: { discussionId, userId },
       });
-
+      const { questionId } = await prisma.discussion.findUnique({
+        where: {
+          id: discussionId,
+        },
+        select: {
+          questionId: true,
+        },
+      });
+      await prisma.notification.create({
+        data: {
+          userId: userId,
+          actorId: actorId,
+          content: "Downvoted your discussion",
+          actor_username,
+          actor_image,
+          type: "discussion",
+          type_id: questionId,
+        },
+      });
       return NextResponse.json({ message: "Downvoted successfully" });
     }
 

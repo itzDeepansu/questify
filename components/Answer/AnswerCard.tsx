@@ -32,7 +32,10 @@ const AnswerCard = ({ answer }) => {
       const response = await axios.post(`/answer/vote`, {
         type,
         answerId: answer.id,
-        userId: user.id,
+        userId: answer.user.id,
+        actor_image:user.image,
+        actor_username:user.username,
+        actorId:user.id,
       });
     } catch (error) {
       console.error("Error upvoting question:", error);
@@ -61,7 +64,7 @@ const AnswerCard = ({ answer }) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  disabled={isUpvoted || !user}
+                  disabled={isUpvoted || !user || answer.user.id === user.id}
                   onClick={() => handleVote("upvote")}
                   className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
                 >
@@ -76,7 +79,7 @@ const AnswerCard = ({ answer }) => {
                   variant="ghost"
                   size="sm"
                   className="flex items-center space-x-1 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out"
-                  disabled={isDownvoted || !user}
+                  disabled={isDownvoted || !user || answer.user.id === user.id}
                   onClick={() => handleVote("downvote")}
                 >
                   <ChevronDown

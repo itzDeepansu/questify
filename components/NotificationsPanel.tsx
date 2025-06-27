@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "@/libs/axios";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Loader2 , X } from "lucide-react";
-const NotificationsPanel = ({ user , notifications, setNotifications , setNewNotification}) => {
+import { Loader2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+const NotificationsPanel = ({
+  user,
+  notifications,
+  setNotifications,
+  setNewNotification,
+}) => {
   const [isSearching, setIsSearching] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     setNewNotification(false);
     const getNotifications = async () => {
@@ -16,10 +23,12 @@ const NotificationsPanel = ({ user , notifications, setNotifications , setNewNot
     };
     getNotifications();
   }, [user]);
-  const handleNotificationRead =(id)=>{
-    setNotifications((prev) => prev.filter((notification) => notification.id !== id));
+  const handleNotificationRead = (id) => {
+    setNotifications((prev) =>
+      prev.filter((notification) => notification.id !== id)
+    );
     axios.put("/notifications/updateNotificationStatus", { id: id });
-  }
+  };
   const formatDate = (createdAt) => {
     const date = new Date(createdAt).toLocaleString("en-IN", {
       dateStyle: "medium",
@@ -27,12 +36,19 @@ const NotificationsPanel = ({ user , notifications, setNotifications , setNewNot
     });
     return date;
   };
+  const handleNotificationClick = (notificationId, type_id) => {
+    handleNotificationRead(notificationId);
+    router.push(`/question/${type_id}`);
+  };
   return (
     <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-scroll w-96">
       {notifications.map((notification) => (
         <div
           key={notification.id}
           className="p-4 hover:bg-[#ecb632] transition-colors duration-500 ease-in-out flex items-start gap-3 rounded-lg border relative"
+          onClick={() =>
+            handleNotificationClick(notification.id, notification.type_id)
+          }
         >
           <Avatar className="h-10 w-10">
             <AvatarImage
@@ -54,7 +70,13 @@ const NotificationsPanel = ({ user , notifications, setNotifications , setNewNot
               {formatDate(notification.createdAt)}
             </p>
           </div>
-          <X className="absolute top-5 right-2 cursor-pointer hover:text-red-500 hover:bg-white rounded-full" onClick={() => handleNotificationRead(notification.id)} />
+          <X
+            className="absolute top-5 right-2 cursor-pointer hover:text-red-500 hover:bg-white rounded-full"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNotificationRead(notification.id);
+            }}
+          />
         </div>
       ))}
       {!notifications.length && !isSearching && (
