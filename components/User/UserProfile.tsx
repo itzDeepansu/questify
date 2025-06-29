@@ -43,11 +43,11 @@ const UserProfile = () => {
   }
   if (!user) return <div className="p-8">User not found</div>;
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      <div className="container mx-auto px-4 py-2">
+    <div className="max-w-5xl mx-auto sm:p-4">
+      <div className="container mx-auto px-2 sm:px-4 py-2">
         <div className="bg-gray-100 rounded-3xl shadow p-8 mb-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <Avatar className="h-40 w-40">
+          <div className="flex flex-col lg:flex-row gap-8 items-center">
+            <Avatar className="h-32 w-32 sm:h-40 sm:w-40">
               <AvatarImage src={user.image || undefined} />
               <AvatarFallback className="text-4xl bg-gray-300 text-white font-bold">
                 {user.username.slice(0, 2).toUpperCase()}
@@ -97,7 +97,7 @@ const UserProfile = () => {
         </div>
 
         <Tabs defaultValue="questions" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6 h-12">
+          <TabsList className="grid w-full grid-rows-2 grid-cols-2 sm:grid-rows-1 sm:grid-cols-3 mb-6 h-36 sm:h-12">
             <TabsTrigger value="questions" className="rounded-md">
               <HelpCircle className="h-4 w-4 mr-1" /> Questions (
               {user.questions.length})

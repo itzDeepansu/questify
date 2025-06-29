@@ -188,3 +188,31 @@
     @apply bg-background text-foreground;
   }
 }
+@keyframes fade-in-left {
+  from {
+    transform: translateX(-2.5rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(2.5rem);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in-left {
+  animation: fade-in-left 0.5s ease-in-out forwards;
+}
+@keyframes fade-out-left {
+  from {
+    transform: translateX(2.5rem);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-2.5rem);
+    opacity: 0;
+  }
+}
+
+.animate-fade-out-left {
+  animation: fade-out-left 0.5s ease-in-out forwards;
+}

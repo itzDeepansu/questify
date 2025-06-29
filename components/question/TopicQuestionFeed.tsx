@@ -80,6 +80,9 @@ const TopicQuestionFeed = () => {
       {!hasMore && questions.length > 0 && (
         <div className="text-center py-4 text-gray-400">No more questions.</div>
       )}
+      {!hasMore && !loading && questions.length === 0 && (
+        <div className="text-center py-4 text-gray-400">No questions on this topic</div>
+      )}
     </div>
   );
 };

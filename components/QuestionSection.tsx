@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
+import { Skeleton } from "@/components/ui/skeleton";
 const QuestionSection = ({ questionId }) => {
   const [data, setData] = useState(null);
   const { user } = useSessionContext();
@@ -16,6 +17,7 @@ const QuestionSection = ({ questionId }) => {
   const [downvotes, setDownvotes] = useState(0);
   const [isDownvoted, setIsDownvoted] = useState(false);
   const [timeAgo, setTimeAgo] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -30,11 +32,15 @@ const QuestionSection = ({ questionId }) => {
         setDownvotes(response.data.downvotes.length);
         setTimeAgo(useTimeAgo(response.data.createdAt));
       } catch (err) {
-        console.log("Something went wrong",err);
+        console.log("Something went wrong", err);
+      } finally {
+        setTimeout(() => {
+          setDataLoaded(true);
+        }, 900); // 1000ms = 1 second
       }
     };
     getData();
-  }, [user?.id,questionId]);
+  }, [user?.id, questionId]);
   const handleVote = async (type: string) => {
     try {
       if (type === "upvote") {
@@ -72,10 +78,14 @@ const QuestionSection = ({ questionId }) => {
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
                 <span className="font-semibold">{data?.user?.username}</span>
+                {!dataLoaded && <Skeleton className="h-4 w-30" />}
                 <span className="text-gray-500 text-sm">asked {timeAgo}</span>
+                {!dataLoaded && <Skeleton className="h-4 w-30" />}
               </div>
               <h1 className="text-2xl font-bold mb-3">{data?.title}</h1>
+              {!dataLoaded && <Skeleton className="h-8 w-44" />}
               <p className="text-gray-700 mb-4 leading-relaxed">{data?.body}</p>
+              {!dataLoaded && <Skeleton className="h-8 w-52" />}
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
@@ -130,6 +140,7 @@ const QuestionSection = ({ questionId }) => {
                     ))}
                   </div> */}
             </div>
+            {!dataLoaded && <Skeleton className="h-32 w-32 ml-auto rounded-sm" />}
             {data?.image && (
               <img
                 src={data?.image}

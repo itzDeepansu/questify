@@ -53,7 +53,7 @@ const topicClickHandler = (topicName: string) => {
           return (
             <div
               key={topic.id}
-              className="relative h-40 rounded-xl overflow-hidden group shadow-md bg-white hover:cursor-pointer"
+              className="relative h-40 rounded-xl overflow-hidden group shadow-md bg-white hover:cursor-pointer text-center"
               style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundSize: "cover",

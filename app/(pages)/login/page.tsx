@@ -59,7 +59,7 @@ const Login = () => {
 
   return (
     <div className="w-screen min-h-[100dvh] flex flex-col-reverse lg:flex-row text-black bg-[#f5f5f5] justify-center items-center">
-      <div className="flex items-center justify-center py-20 rounded-xl px-8 border border-gray-300 bg-white">
+      <div className="flex items-center justify-center py-20 rounded-xl px-8 border border-gray-300 bg-white w-[90dvw] md:w-fit">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto grid w-[350px] gap-6"

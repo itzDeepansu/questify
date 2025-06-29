@@ -16,6 +16,7 @@ import Link from "next/link";
 import axios from "@/libs/axios";
 import NotificationsPanel from "./NotificationsPanel";
 import { useRealtimeNotifications } from "@/hooks/useRealTimeNotifications";
+import NavbarSidebar from "./ui/NavbarSidebar";
 const Navbar = ({ externalClasses = "" }) => {
   const { user } = useSessionContext();
   const [search, setSearch] = useState("");
@@ -124,7 +125,7 @@ const Navbar = ({ externalClasses = "" }) => {
   };
   return (
     <header
-      className={`${externalClasses} bg-white border-b border-gray-200 sticky top-0 z-50`}
+      className={`${externalClasses} border-b border-gray-200 sticky top-0 z-50 backdrop-blur-lg`}
     >
       <div className="max-w-6xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
@@ -133,7 +134,7 @@ const Navbar = ({ externalClasses = "" }) => {
               <img
                 src="/questify_logo.png"
                 alt="unable to load"
-                className="w-32"
+                className="sm:w-32 sm:block hidden"
               />
             </Link>
             <nav className="hidden md:flex space-x-4">
@@ -159,6 +160,7 @@ const Navbar = ({ externalClasses = "" }) => {
                 Topics
               </Link>
             </nav>
+            <NavbarSidebar classnames="md:hidden" />
           </div>
           <div
             className="flex-1 max-w-md mx-4 relative"

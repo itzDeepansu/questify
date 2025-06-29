@@ -5,7 +5,7 @@ import Questioncard from "./Questioncard";
 import axios from "@/libs/axios";
 import { useSessionContext } from "@/context/SessionContext";
 import Link from "next/link";
-
+import { Skeleton } from "@/components/ui/skeleton";
 const Questionsfeed = ({ refreshFlag }) => {
   const { user } = useSessionContext();
   const [questions, setQuestions] = useState([]);
@@ -34,7 +34,9 @@ const Questionsfeed = ({ refreshFlag }) => {
       } catch (error) {
         console.error("Error fetching questions:", error);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(true);
+        }, 1000); // 1000ms = 1 second
       }
     };
 
@@ -50,7 +52,10 @@ const Questionsfeed = ({ refreshFlag }) => {
   return (
     <div className="space-y-6">
       {questions.map((question) => (
-        <Card key={question.id} className="overflow-hidden  hover:bg-[#eab530]/90 transition-colors duration-500 ease-in-out">
+        <Card
+          key={question.id}
+          className="overflow-hidden  hover:bg-[#eab530]/90 transition-colors duration-500 ease-in-out"
+        >
           <Link href={`/question/${question.id}`}>
             <CardContent className="py-2 px-8">
               <Questioncard question={question} />
@@ -58,7 +63,13 @@ const Questionsfeed = ({ refreshFlag }) => {
           </Link>
         </Card>
       ))}
-
+      {loading && questions.length === 0 && (
+        <div className="space-y-2">
+          <Skeleton className="h-44 w-full" />
+          <Skeleton className="h-44 w-full" />
+          <Skeleton className="h-44 w-full" />
+        </div>
+      )}
       {hasMore && (
         <div className="text-center">
           <button
