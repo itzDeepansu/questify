@@ -76,7 +76,7 @@ const Login = () => {
               <Input
                 id="email"
                 type="text"
-                placeholder="alice@example.com"
+                placeholder="itzdeepansu@gmail.com"
                 required
                 className="rounded-[3px] placeholder:text-[#817e7e] border-gray-300"
                 {...register("email")}
@@ -96,7 +96,7 @@ const Login = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 required
-                placeholder="**********"
+                placeholder="••••••••"
                 className="rounded-[3px] border-gray-300"
                 {...register("password")}
               />
@@ -121,7 +121,7 @@ const Login = () => {
             )}
             <Button
               type="submit"
-              className="w-full bg-black text-white hover:bg-gray-800 border cursor-pointer border-gray-300 transition-colors rounded-[3px]"
+              className="w-full bg-black text-white hover:bg-[#ecb732dd] hover:text-black border cursor-pointer border-gray-300 transition-all duration-600 ease-in-out rounded-[3px]"
             >
               Login
             </Button>
@@ -138,7 +138,7 @@ const Login = () => {
         <img
           src="/questify_logo.png"
           alt="logo"
-          className="-translate-x-3 xl:translate-x-32 h-full w-full object-cover"
+          className=" xl:translate-x-32 h-full w-full object-cover"
         />
       </div>
     </div>

@@ -41,7 +41,7 @@ const NotificationsPanel = ({
     router.push(`/question/${type_id}`);
   };
   return (
-    <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-scroll w-96">
+    <div className="absolute top-full -right-3 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-scroll w-96">
       {notifications.map((notification) => (
         <div
           key={notification.id}

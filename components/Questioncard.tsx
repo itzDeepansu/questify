@@ -18,7 +18,7 @@ const Questioncard = ({ question }) => {
           <span className="text-gray-500 text-sm">asked {timeAgo}</span>
         </div>
         <h2 className="text-xl font-semibold mb-2">{question.title}</h2>
-        <p className="text-gray-700 mb-3">{question.body}</p>
+        <p className="text-gray-700 mb-3 max-h-12 overflow-hidden">{question.body}</p>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Button
@@ -53,7 +53,7 @@ const Questioncard = ({ question }) => {
         <img
           src={question.image}
           alt="no image"
-          className="max-h-32 ml-auto rounded-sm"
+          className="hidden sm:block max-h-32 ml-auto rounded-sm"
         />
       )}
     </div>

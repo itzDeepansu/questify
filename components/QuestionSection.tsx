@@ -70,13 +70,21 @@ const QuestionSection = ({ questionId }) => {
     <Card className="mb-6">
       <CardContent className="p-6">
         <div className="space-y-4">
-          <div className="flex items-start space-x-3 relative">
-            <Avatar className="w-12 h-12">
-              <AvatarImage src={data?.user?.image} />
-              <AvatarFallback>{data?.user?.username[0]}</AvatarFallback>
-            </Avatar>
+          <div className="flex items-start flex-col sm:flex-row space-x-3 relative">
+            <div className="flex gap-4">
+              <Avatar className="w-12 h-12">
+                <AvatarImage src={data?.user?.image} />
+                <AvatarFallback>{data?.user?.username[0]}</AvatarFallback>
+              </Avatar>
+              <div className="flex items-center space-x-2 mb-2 sm:hidden">
+                <span className="font-semibold">{data?.user?.username}</span>
+                {!dataLoaded && <Skeleton className="h-4 w-30" />}
+                <span className="text-gray-500 text-sm">asked {timeAgo}</span>
+                {!dataLoaded && <Skeleton className="h-4 w-30" />}
+              </div>
+            </div>
             <div className="flex-1">
-              <div className="flex items-center space-x-2 mb-2">
+              <div className="sm:flex items-center space-x-2 mb-2 hidden">
                 <span className="font-semibold">{data?.user?.username}</span>
                 {!dataLoaded && <Skeleton className="h-4 w-30" />}
                 <span className="text-gray-500 text-sm">asked {timeAgo}</span>
@@ -84,6 +92,16 @@ const QuestionSection = ({ questionId }) => {
               </div>
               <h1 className="text-2xl font-bold mb-3">{data?.title}</h1>
               {!dataLoaded && <Skeleton className="h-8 w-44" />}
+              {!dataLoaded && (
+                <Skeleton className="h-32 w-full ml-auto rounded-sm" />
+              )}
+              {data?.image && (
+                <img
+                  src={data?.image}
+                  alt="no image"
+                  className="max-h-inherit rounded-sm"
+                />
+              )}
               <p className="text-gray-700 mb-4 leading-relaxed">{data?.body}</p>
               {!dataLoaded && <Skeleton className="h-8 w-52" />}
 
@@ -140,14 +158,6 @@ const QuestionSection = ({ questionId }) => {
                     ))}
                   </div> */}
             </div>
-            {!dataLoaded && <Skeleton className="h-32 w-32 ml-auto rounded-sm" />}
-            {data?.image && (
-              <img
-                src={data?.image}
-                alt="no image"
-                className="max-h-32 ml-auto rounded-sm"
-              />
-            )}
           </div>
         </div>
       </CardContent>
