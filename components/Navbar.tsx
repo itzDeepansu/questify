@@ -1,15 +1,9 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import {
-  Search,
-  Home,
-  Users,
-  BookOpen,
-  Loader2,
-  BellRing,
-} from "lucide-react";
+import { Search, Home, Users, BookOpen, Loader2, BellRing } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Separator } from "./ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSessionContext } from "@/context/SessionContext";
 import Link from "next/link";
@@ -17,6 +11,7 @@ import axios from "@/libs/axios";
 import NotificationsPanel from "./NotificationsPanel";
 import { useRealtimeNotifications } from "@/hooks/useRealTimeNotifications";
 import NavbarSidebar from "./ui/NavbarSidebar";
+import { set } from "react-hook-form";
 const Navbar = ({ externalClasses = "" }) => {
   const { user } = useSessionContext();
   const [search, setSearch] = useState("");
@@ -33,6 +28,7 @@ const Navbar = ({ externalClasses = "" }) => {
     useState(false);
   const [notifications, setNotifications] = useState([]);
   const [newNotification, setNewNotification] = useState(false);
+  const [topics, setTopics] = useState([]);
   // Debounce effect
   useEffect(() => {
     if (isFirstRender.current) {
@@ -64,6 +60,7 @@ const Navbar = ({ externalClasses = "" }) => {
           lastId: null,
         });
         setResults(res.data.questions);
+        setTopics(res.data.topics);
         setNextCursor(res.data.nextCursor);
         setHasMore(res.data.hasMore);
       } catch (err) {
@@ -185,6 +182,7 @@ const Navbar = ({ externalClasses = "" }) => {
             </div>
             {showSearchDropdown && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+                <div className="px-4 text-sm text-gray-500">Questions</div>
                 {results.map((question) => (
                   <Link
                     href={`/question/${question.id}`}
@@ -192,6 +190,17 @@ const Navbar = ({ externalClasses = "" }) => {
                     key={question.id}
                   >
                     {question.title}
+                  </Link>
+                ))}
+                <Separator />
+                <div className="px-4 text-sm text-gray-500">Topics</div>
+                {topics.map((topic) => (
+                  <Link
+                    href={`/topic/${topic}`}
+                    className="p-4 hover:bg-[#ecb7327b] block transition-colors duration-500 ease-in-out"
+                    key={topic}
+                  >
+                    {topic}
                   </Link>
                 ))}
                 {!results.length && !isSearching && (

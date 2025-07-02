@@ -17,12 +17,13 @@ export default function Home() {
   };
   useEffect(() => {
     if (!session?.user) {
-      router.push("/login");
+      console.log("No user session found, loading...");
+      setLoading(true);
     }
     if (status === "authenticated") {
       setLoading(false);
     }
-  }, [ router]);
+  }, [ router,session, status]);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[100vh] w-[100vw]">

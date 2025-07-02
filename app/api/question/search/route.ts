@@ -1,4 +1,3 @@
-// app/api/question/search/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/libs/prismaClient";
 
@@ -7,10 +6,10 @@ export async function POST(req: NextRequest) {
     const { searchedInput, lastId, limit = 10 } = await req.json();
 
     if (!searchedInput || searchedInput.trim() === "") {
-      return NextResponse.json({ questions: [], hasMore: false });
+      return NextResponse.json({ questions: [], topics: [], hasMore: false });
     }
 
-    const results = await prisma.$queryRawUnsafe(
+    const questions = await prisma.$queryRawUnsafe(
       `
       SELECT "Question".*, "User"."username", "User"."image"
       FROM "Question"
@@ -27,13 +26,25 @@ export async function POST(req: NextRequest) {
       searchedInput
     );
 
+    const topics = await prisma.$queryRawUnsafe(
+      `
+      SELECT "name"
+      FROM "Topic"
+      WHERE similarity("name", $1) > 0.2
+      ORDER BY similarity("name", $1) DESC;
+    `,
+      searchedInput
+    );
+
     return NextResponse.json({
-      questions: results,
-      hasMore: results.length === Number(limit),
-      nextCursor: results.length > 0 ? results[results.length - 1].id : null,
+      questions,
+      topics: topics.map((t) => t.name),
+      hasMore: questions.length === Number(limit),
+      nextCursor:
+        questions.length > 0 ? questions[questions.length - 1].id : null,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Search error:", error);
     return NextResponse.json({ error: "Search failed" }, { status: 500 });
   }
 }
